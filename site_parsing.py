@@ -32,6 +32,6 @@ def pars_weather():
         return end_data
 
 
-print(pars_weather())
+
 with open('weather_file.json', 'w', encoding="utf-8") as write_file:
     json.dump(pars_weather(), write_file, ensure_ascii=False)
