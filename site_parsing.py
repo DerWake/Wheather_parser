@@ -15,23 +15,21 @@ def pars_weather():
 
     if request.status_code == 200:
 
-        end_data = []
         soup = bs(request.content, "lxml")
         weather__content = soup.find('div', attrs={'class': 'weather__content_tabs'})
         days_info = weather__content.find_all('div', attrs={'class': 'weather__content_tab'})
         for day in days_info:
 
-            data = {
+            yield {
                 'dayofweek': day.p.text,
                 'month': day.find('p', attrs={'class': 'weather__content_tab-month'}).text,
                 'dayofmonth': day.find('p', attrs={'class': 'weather__content_tab-date'}).text,
                 'weather': day.find('div', attrs={'class': 'weather__content_tab-icon'}).text,
                 'temperature': day.find('div', attrs={'class': 'weather__content_tab-temperature'}).text,
             }
-            end_data.append(data)
-        return end_data
+
 
 
 
 with open('weather_file.json', 'w', encoding="utf-8") as write_file:
-    json.dump(pars_weather(), write_file, ensure_ascii=False)
+    json.dump(list(pars_weather()), write_file, ensure_ascii=False)
